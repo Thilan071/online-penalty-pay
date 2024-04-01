@@ -7,7 +7,7 @@ import {HiOutlineMenuAlt4} from 'react-icons/hi'
 import {FaFacebook,FaTwitter,FaYoutube,FaPinterest,FaInstagram} from 'react-icons/fa'
 import { Button } from 'antd';
 import { Link } from 'react-router-dom';
-import capture from '../assets/capture.png';
+import capture from '../assets/capture.svg';
 
 const Navbar = () => {
  
@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <div className='flex w-full justify-between items-center  h-20 px-4 absolute z-10 text-white '> 
     <div >
-        <h1   className={logo ? 'hidden' : 'block'}>B.</h1>
+    <img  style={{ width: '100px', height: '100px' }} src={capture}/>
     </div>
     <ul className='hidden md:flex'>
         <li>Home</li>
