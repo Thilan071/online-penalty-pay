@@ -40,7 +40,6 @@ const Navbar = () => {
         <BsPerson size={20} />
     </div>
 
-    {/* hamburger menu */}
 
     <div onClick={handleNav} className='  md:hidden z-10'>
       {nav ? <AiOutlineClose size={20} className="text-black" /> :<HiOutlineMenuAlt4 size={20} />}
