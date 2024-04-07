@@ -119,10 +119,12 @@
 
 
 
+
+
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Button, Form, Input, InputNumber, Spin, Alert } from 'antd';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc,updateDoc } from 'firebase/firestore';
 import { db } from './FirebaseConfig';
 
 const { Search } = Input;
@@ -153,9 +155,14 @@ const Payment = () => {
     setLoading(true);
     setError('');
     try {
-      // Assuming you want to use the NIC as the document ID in the 'payment status' collection
+      // Save to the payment status collection
       const paymentStatusRef = doc(db, 'payment status', nic);
       await setDoc(paymentStatusRef, paymentDetails);
+
+      // Update the DRIVER DETAILS collection
+      const driverDetailsRef = doc(db, 'DRIVER DETAILS', nic);
+      await updateDoc(driverDetailsRef, { paymentStatus: true });
+
       alert('Payment status saved successfully!');
     } catch (error) {
       console.error("Error saving payment status:", error);
@@ -164,7 +171,6 @@ const Payment = () => {
       setLoading(false);
     }
   };
-
   const onFinish = async (values) => {
     console.log(values);
     // Here, add additional payment details as needed
@@ -265,3 +271,75 @@ export default Payment;
 
 
 
+// import React, { useState } from 'react';
+// import ReactDOM from 'react-dom/client';
+// import { Button, Form, Input, Spin, Alert } from 'antd';
+// import { doc, updateDoc, setDoc } from 'firebase/firestore';
+// import { db } from './FirebaseConfig';
+
+// const { Search } = Input;
+
+// const Payment = () => {
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState('');
+//   const [nic, setNic] = useState('');
+
+//   const savePaymentStatus = async () => {
+//     setLoading(true);
+//     setError('');
+//     const paymentDetails = {
+//       paymentStatus: true, // Assuming true represents a successful payment
+//       paymentDate: new Date(), // Example payment date
+//       // Include other details as needed
+//     };
+
+//     try {
+//       // Update payment status in DRIVER DETAILS collection
+//       const driverDetailsRef = doc(db, 'DRIVER DETAILS', nic);
+//       await updateDoc(driverDetailsRef, paymentDetails);
+
+//       // Save payment details in a separate payment status collection
+//       const paymentStatusRef = doc(db, 'payment status', nic);
+//       await setDoc(paymentStatusRef, paymentDetails);
+
+//       alert('Payment status saved successfully!');
+//     } catch (error) {
+//       console.error("Error saving payment status:", error);
+//       setError('Failed to save payment status. Please try again.');
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const onSearch = async (searchedNic) => {
+//     setLoading(true);
+//     setError('');
+//     setNic(searchedNic);
+//     // Perform search operation (details omitted for brevity)
+//     setLoading(false);
+//   };
+
+//   return (
+//     <div style={{ maxWidth: 600, margin: 'auto' }}>
+//       <Spin spinning={loading}>
+//         <Search
+//           placeholder="Input NIC here"
+//           allowClear
+//           enterButton="Search"
+//           size="large"
+//           onSearch={onSearch}
+//           style={{ marginBottom: 20 }}
+//         />
+//         {error && <Alert message={error} type="error" showIcon style={{ marginBottom: 20 }} />}
+//         <Button type="default" onClick={savePaymentStatus}>
+//           Pay
+//         </Button>
+//       </Spin>
+//     </div>
+//   );
+// };
+
+// const container = document.getElementById('root');
+// const root = ReactDOM.createRoot(container);
+// root.render(<Payment />);
+// export default Payment;
